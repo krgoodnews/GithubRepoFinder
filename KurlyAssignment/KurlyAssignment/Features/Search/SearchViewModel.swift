@@ -15,7 +15,6 @@ final class SearchViewModel {
     @Published private(set) var errorMessage: String?
 
     private let service: GitHubSearchServiceProtocol
-    private var cancellables = Set<AnyCancellable>()
     private var requestCancellable: AnyCancellable?
 
     init(service: GitHubSearchServiceProtocol = GitHubSearchService()) {
@@ -31,6 +30,7 @@ final class SearchViewModel {
     func clearResults() {
         requestCancellable?.cancel()
         requestCancellable = nil
+
         repositories = []
         totalCountText = ""
         errorMessage = nil
@@ -39,8 +39,8 @@ final class SearchViewModel {
 
     private func search(keyword: String, page: Int) {
         requestCancellable?.cancel()
-        isLoading = true
         errorMessage = nil
+        isLoading = true
 
         requestCancellable = service.searchRepositories(keyword: keyword, page: page)
             .receive(on: DispatchQueue.main)
@@ -58,3 +58,4 @@ final class SearchViewModel {
             }
     }
 }
+
