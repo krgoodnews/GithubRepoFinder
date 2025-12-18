@@ -13,6 +13,8 @@ final class SearchViewController: UIViewController {
 
     // MARK: - UI Component
 
+    private var footerContainerView: UIView?
+
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
@@ -46,11 +48,21 @@ final class SearchViewController: UIViewController {
         setShowingSearchResults(false)
     }
 
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        guard let footerContainerView else { return }
+        if footerContainerView.frame.width != tableView.bounds.width {
+            footerContainerView.frame.size.width = tableView.bounds.width
+            tableView.tableFooterView = footerContainerView
+        }
+    }
+
     private func configureTableView() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "RecentKeywordCell")
+        tableView.register(RecentKeywordCell.self, forCellReuseIdentifier: RecentKeywordCell.reuseIdentifier)
 
         view.addSubview(tableView)
 
@@ -60,6 +72,34 @@ final class SearchViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+
+        let footerView = makeTableFooterView()
+        footerContainerView = footerView
+        tableView.tableFooterView = footerView
+    }
+
+    private func makeTableFooterView() -> UIView {
+        let footerHeight: CGFloat = 56
+        let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: footerHeight))
+
+        let button = UIButton(type: .system)
+        button.setTitle("전체 삭제", for: .normal)
+        button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
+        button.setTitleColor(.systemRed, for: .normal)
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        button.addAction(UIAction { [weak self] _ in
+            self?.recentKeywordStore.removeAll()
+        }, for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+
+        container.addSubview(button)
+
+        NSLayoutConstraint.activate([
+            button.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            button.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8)
+        ])
+
+        return container
     }
 
     private func configureSearchController() {
@@ -120,26 +160,15 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "RecentKeywordCell", for: indexPath)
         let item = recentKeywordStore.recentKeywords[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: RecentKeywordCell.reuseIdentifier, for: indexPath)
 
-        var content = cell.defaultContentConfiguration()
-        content.text = item.keyword
-        cell.contentConfiguration = content
-        cell.selectionStyle = .none
-
-        let button = UIButton(type: .system)
-        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 18, weight: .regular)
-        button.setImage(UIImage(systemName: "x.circle.fill", withConfiguration: symbolConfig), for: .normal)
-        button.tintColor = .secondaryLabel
-        button.accessibilityLabel = "최근 검색어 삭제"
-        button.addAction(
-            UIAction { [weak self] _ in
+        if let keywordCell = cell as? RecentKeywordCell {
+            keywordCell.configure(keyword: item.keyword) { [weak self] in
                 self?.recentKeywordStore.remove(keyword: item.keyword)
-            },
-            for: .touchUpInside
-        )
-        cell.accessoryView = button
+            }
+            return keywordCell
+        }
 
         return cell
     }

@@ -42,11 +42,13 @@ final class RecentKeywordStore {
         let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.isEmpty == false else { return }
 
-        let beforeCount = recentKeywords.count
         recentKeywords.removeAll { $0.keyword.caseInsensitiveCompare(trimmed) == .orderedSame }
-
-        guard recentKeywords.count != beforeCount else { return }
         save()
+    }
+
+    func removeAll() {
+        recentKeywords = []
+        userDefaults.removeObject(forKey: Const.userDefaultsKey)
     }
 
     private func load() {
@@ -77,4 +79,3 @@ struct RecentKeyword: Codable, Hashable {
     let keyword: String
     let searchedAt: Date
 }
-
