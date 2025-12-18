@@ -62,7 +62,10 @@ final class SearchViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(RecentKeywordCell.self, forCellReuseIdentifier: RecentKeywordCell.reuseIdentifier)
+        tableView.register(
+            UINib(nibName: "RecentKeywordCell", bundle: Bundle(for: RecentKeywordCell.self)),
+            forCellReuseIdentifier: RecentKeywordCell.reuseIdentifier
+        )
 
         view.addSubview(tableView)
 
@@ -83,10 +86,13 @@ final class SearchViewController: UIViewController {
         let container = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: footerHeight))
 
         let button = UIButton(type: .system)
-        button.setTitle("전체 삭제", for: .normal)
-        button.titleLabel?.font = .preferredFont(forTextStyle: .callout)
-        button.setTitleColor(.systemRed, for: .normal)
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        var configuration = UIButton.Configuration.plain()
+        var title = AttributedString("전체 삭제")
+        title.font = .preferredFont(forTextStyle: .callout)
+        configuration.attributedTitle = title
+        configuration.baseForegroundColor = .systemRed
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
+        button.configuration = configuration
         button.addAction(UIAction { [weak self] _ in
             self?.recentKeywordStore.removeAll()
         }, for: .touchUpInside)

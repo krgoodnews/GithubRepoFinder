@@ -12,33 +12,8 @@ final class RecentKeywordCell: UITableViewCell {
 
     var onTapDelete: (() -> Void)?
 
-    private let keywordLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textColor = .label
-        label.numberOfLines = 1
-        return label
-    }()
-
-    private let deleteButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
-        button.tintColor = .tertiaryLabel
-        return button
-    }()
-
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-        configureViews()
-    }
-
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-        selectionStyle = .none
-        configureViews()
-    }
+    @IBOutlet private weak var keywordLabel: UILabel!
+    @IBOutlet private weak var deleteButton: UIButton!
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -46,33 +21,20 @@ final class RecentKeywordCell: UITableViewCell {
         onTapDelete = nil
     }
 
-    func configure(keyword: String, onTapDelete: @escaping () -> Void) {
-        keywordLabel.text = keyword
-        self.onTapDelete = onTapDelete
-    }
+    override func awakeFromNib() {
+        super.awakeFromNib()
 
-    private func configureViews() {
-        keywordLabel.translatesAutoresizingMaskIntoConstraints = false
-        deleteButton.translatesAutoresizingMaskIntoConstraints = false
-
-        contentView.addSubview(keywordLabel)
-        contentView.addSubview(deleteButton)
-
+        selectionStyle = .none
+        deleteButton.setImage(UIImage(systemName: "x.circle.fill"), for: .normal)
+        deleteButton.tintColor = .tertiaryLabel
         deleteButton.addAction(UIAction { [weak self] _ in
             self?.onTapDelete?()
         }, for: .touchUpInside)
+    }
 
-        NSLayoutConstraint.activate([
-            keywordLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            keywordLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            keywordLabel.trailingAnchor.constraint(equalTo: deleteButton.leadingAnchor, constant: -12),
-
-            deleteButton.leadingAnchor.constraint(equalTo: keywordLabel.trailingAnchor, constant: 12),
-            deleteButton.trailingAnchor.constraint(lessThanOrEqualTo: contentView.trailingAnchor, constant: -16),
-            deleteButton.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
-            deleteButton.widthAnchor.constraint(equalToConstant: 24),
-            deleteButton.heightAnchor.constraint(equalToConstant: 24)
-        ])
+    func configure(keyword: String, onTapDelete: @escaping () -> Void) {
+        keywordLabel.text = keyword
+        self.onTapDelete = onTapDelete
     }
 }
 
