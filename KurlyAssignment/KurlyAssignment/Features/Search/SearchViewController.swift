@@ -32,7 +32,7 @@ final class SearchViewController: UIViewController {
     }()
 
     private let resultsViewController = SearchResultViewController()
-    private let recentKeywordStore = RecentKeywordStore()
+    private let viewModel = SearchScreenViewModel()
     private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {
@@ -94,7 +94,7 @@ final class SearchViewController: UIViewController {
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
         button.configuration = configuration
         button.addAction(UIAction { [weak self] _ in
-            self?.recentKeywordStore.removeAll()
+            self?.viewModel.deleteAllRecentKeywords()
         }, for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
 
@@ -115,10 +115,17 @@ final class SearchViewController: UIViewController {
     }
 
     private func bind() {
-        recentKeywordStore.$recentKeywords
+        viewModel.recentKeywordsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.tableView.reloadData()
+            }
+            .store(in: &cancellables)
+
+        viewModel.output.showSearchResults
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] keyword in
+                self?.showSearchResults(keyword: keyword)
             }
             .store(in: &cancellables)
     }
@@ -134,10 +141,7 @@ extension SearchViewController: UISearchBarDelegate {
         let keyword = (searchBar.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
         guard keyword.isEmpty == false else { return }
 
-        recentKeywordStore.add(keyword: keyword)
-        setShowingSearchResults(true)
-        resultsViewController.update(keyword: keyword)
-        searchBar.resignFirstResponder()
+        viewModel.submitSearch(keyword: keyword)
     }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -162,20 +166,40 @@ extension SearchViewController: UISearchResultsUpdating {
 
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        recentKeywordStore.recentKeywords.count
+        viewModel.recentKeywords.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = recentKeywordStore.recentKeywords[indexPath.row]
+        let item = viewModel.recentKeywords[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: RecentKeywordCell.reuseIdentifier, for: indexPath)
 
         if let keywordCell = cell as? RecentKeywordCell {
             keywordCell.configure(keyword: item.keyword) { [weak self] in
-                self?.recentKeywordStore.remove(keyword: item.keyword)
+                self?.viewModel.deleteRecentKeyword(keyword: item.keyword)
             }
             return keywordCell
         }
 
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+
+        let item = viewModel.recentKeywords[indexPath.row]
+        viewModel.selectRecentKeyword(keyword: item.keyword)
+    }
+}
+
+extension SearchViewController {
+    private func showSearchResults(keyword: String) {
+        let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.isEmpty == false else { return }
+
+        searchController.searchBar.text = trimmed
+        searchController.isActive = true
+        setShowingSearchResults(true)
+        resultsViewController.update(keyword: trimmed)
+        searchController.searchBar.resignFirstResponder()
     }
 }
