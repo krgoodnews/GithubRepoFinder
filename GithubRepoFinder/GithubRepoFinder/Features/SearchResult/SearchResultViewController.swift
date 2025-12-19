@@ -53,7 +53,6 @@ final class SearchResultViewController: UIViewController {
         tableView.delegate = self
         tableView.estimatedRowHeight = 64
         tableView.tableFooterView = UIView()
-        tableView.keyboardDismissMode = .onDrag
 
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Const.repositoryCellReuseIdentifier)
     }

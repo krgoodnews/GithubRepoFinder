@@ -103,7 +103,6 @@ private extension SearchViewController {
         // (addSubview/constraints를 코드에서 다시 만들면 스토리보드 제약이 깨지거나 충돌할 수 있음)
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.keyboardDismissMode = .onDrag
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Const.keywordCellReuseIdentifier)
 
         let footerView = makeTableFooterView()
