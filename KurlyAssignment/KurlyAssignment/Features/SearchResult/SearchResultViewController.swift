@@ -14,6 +14,13 @@ final class SearchResultViewController: UIViewController {
     private let viewModel = RepositorySearchViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let querySubject = PassthroughSubject<String, Never>()
+    
+    private let tableFooterActivityIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .medium)
+        indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+        return indicator
+    }()
 
     private let totalCountLabel: UILabel = {
         let label = UILabel()
@@ -104,6 +111,14 @@ final class SearchResultViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
+        
+        viewModel.$isLoadingNextPage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                guard let self else { return }
+                self.updateTableFooterLoading(isLoading: isLoading)
+            }
+            .store(in: &cancellables)
 
         viewModel.$errorMessage
             .compactMap { $0 }
@@ -127,6 +142,24 @@ final class SearchResultViewController: UIViewController {
                 self.viewModel.setKeyword(keyword)
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateTableFooterLoading(isLoading: Bool) {
+        if isLoading {
+            let footer = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 56))
+            footer.addSubview(tableFooterActivityIndicator)
+            
+            NSLayoutConstraint.activate([
+                tableFooterActivityIndicator.centerXAnchor.constraint(equalTo: footer.centerXAnchor),
+                tableFooterActivityIndicator.centerYAnchor.constraint(equalTo: footer.centerYAnchor)
+            ])
+            
+            tableView.tableFooterView = footer
+            tableFooterActivityIndicator.startAnimating()
+        } else {
+            tableFooterActivityIndicator.stopAnimating()
+            tableView.tableFooterView = UIView()
+        }
     }
 }
 

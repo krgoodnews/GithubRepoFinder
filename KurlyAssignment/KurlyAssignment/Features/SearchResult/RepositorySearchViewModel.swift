@@ -17,6 +17,7 @@ final class RepositorySearchViewModel {
     @Published private(set) var repositories: [GitHubRepository] = []
     @Published private(set) var totalCountText: String = ""
     @Published private(set) var isLoading: Bool = false
+    @Published private(set) var isLoadingNextPage: Bool = false
     @Published private(set) var errorMessage: String?
 
     private let service: GitHubSearchServiceProtocol
@@ -26,6 +27,7 @@ final class RepositorySearchViewModel {
     private var currentPage: Int = 0
     private var totalCount: Int = 0
     private var loadedPages = Set<Int>()
+    private var nextPageThreshold: Int = 5
 
     init(service: GitHubSearchServiceProtocol = GitHubSearchService()) {
         self.service = service
@@ -54,19 +56,22 @@ final class RepositorySearchViewModel {
         totalCountText = ""
         errorMessage = nil
         isLoading = false
+        isLoadingNextPage = false
 
         currentKeyword = ""
         currentPage = 0
         totalCount = 0
         loadedPages = []
+        nextPageThreshold = 5
     }
 
-    func loadNextPageIfNeeded(currentIndex: Int, threshold: Int = 5) {
+    func loadNextPageIfNeeded(currentIndex: Int) {
         guard currentKeyword.isEmpty == false else { return }
         guard isLoading == false else { return }
+        guard isLoadingNextPage == false else { return }
         guard repositories.isEmpty == false else { return }
 
-        let triggerIndex = max(0, repositories.count - threshold)
+        let triggerIndex = max(0, repositories.count - nextPageThreshold)
         guard currentIndex >= triggerIndex else { return }
 
         let nextPage = currentPage + 1
@@ -101,16 +106,25 @@ final class RepositorySearchViewModel {
             totalCount = 0
             loadedPages = []
             currentPage = 0
+            nextPageThreshold = 5
         }
 
         errorMessage = nil
-        isLoading = true
+        if page == 1 {
+            isLoading = true
+        } else {
+            isLoadingNextPage = true
+        }
 
         requestCancellable = service.searchRepositories(keyword: keyword, page: page)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] completion in
                 guard let self else { return }
-                self.isLoading = false
+                if page == 1 {
+                    self.isLoading = false
+                } else {
+                    self.isLoadingNextPage = false
+                }
 
                 if case let .failure(error) = completion {
                     self.errorMessage = error.localizedDescription
@@ -123,6 +137,10 @@ final class RepositorySearchViewModel {
                 self.currentKeyword = keyword
                 self.currentPage = page
                 self.loadedPages.insert(page)
+                
+                if page == 1 {
+                    self.nextPageThreshold = max(1, response.items.count / 2)
+                }
                 self.repositories.append(contentsOf: response.items)
             }
     }

@@ -22,7 +22,8 @@ final class RepositoryCell: UITableViewCell {
         super.awakeFromNib()
         selectionStyle = .none
         
-        avatarView.placeholder = UIImage(systemName: "photo")?.withTintColor(.tertiaryLabel)
+        avatarView.placeholder = UIImage(systemName: "photo")
+        avatarView.tintColor = .tertiaryLabel
         avatarView.contentMode = .scaleAspectFill
         avatarView.clipsToBounds = true
         avatarView.layer.cornerRadius = Const.avatarSize / 2

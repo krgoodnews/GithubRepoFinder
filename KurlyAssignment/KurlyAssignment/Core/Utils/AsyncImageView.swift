@@ -112,17 +112,17 @@ public final class AsyncImageView: UIView {
 
             do {
                 let image = try await Self.downloadImage(url: requestedURL)
-                await self.finishIfCurrent(url: requestedURL) {
+                self.finishIfCurrent(url: requestedURL) {
                     ImageMemoryCache.shared.setImage(image, for: requestedURL)
                     self.imageView.image = image
                     self.onStateChange?(.fetched(image))
                 }
             } catch is CancellationError {
-                await self.finishIfCurrent(url: requestedURL) {
+                self.finishIfCurrent(url: requestedURL) {
                     self.onStateChange?(.idle)
                 }
             } catch {
-                await self.finishIfCurrent(url: requestedURL) {
+                self.finishIfCurrent(url: requestedURL) {
                     self.imageView.image = self.placeholder
                     self.onStateChange?(.error(message: error.localizedDescription))
                 }
