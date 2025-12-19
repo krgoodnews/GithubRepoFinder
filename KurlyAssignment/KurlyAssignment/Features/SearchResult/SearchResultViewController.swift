@@ -161,6 +161,12 @@ final class SearchResultViewController: UIViewController {
             tableView.tableFooterView = UIView()
         }
     }
+
+    private func openRepositoryURL(_ url: URL) {
+        let webViewController = WebViewController(url: url)
+        let navigationController = UINavigationController(rootViewController: webViewController)
+        present(navigationController, animated: true)
+    }
 }
 
 extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate {
@@ -185,5 +191,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let repo = viewModel.repositories[indexPath.row]
+        openRepositoryURL(repo.htmlURL)
     }
 }
