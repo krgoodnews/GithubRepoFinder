@@ -22,10 +22,12 @@ final class RepositoryCell: UITableViewCell {
         super.awakeFromNib()
         selectionStyle = .none
         
-        avatarView.placeholder = UIImage(systemName: "photo")
+        avatarView.placeholder = UIImage(systemName: "photo")?.withTintColor(.tertiaryLabel)
         avatarView.contentMode = .scaleAspectFill
         avatarView.clipsToBounds = true
-        avatarView.imageView.layer.cornerRadius = Const.avatarSize / 2
+        avatarView.layer.cornerRadius = Const.avatarSize / 2
+        avatarView.layer.borderWidth = 1
+        avatarView.layer.borderColor = UIColor.tertiaryLabel.withAlphaComponent(0.5).cgColor
     }
 
     override func prepareForReuse() {
