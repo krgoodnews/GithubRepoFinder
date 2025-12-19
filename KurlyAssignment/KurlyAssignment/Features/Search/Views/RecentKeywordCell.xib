@@ -21,15 +21,24 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="252" verticalHuggingPriority="251" text="{ date }" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="b3S-g8-MjF">
+                        <rect key="frame" x="304" y="13" width="73" height="18"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
+                        <color key="textColor" systemColor="secondaryLabelColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstItem="p1a-3b-hcW" firstAttribute="leading" secondItem="H9f-6P-wpM" secondAttribute="leading" constant="16" id="1eV-Fj-PRm"/>
                     <constraint firstItem="p1a-3b-hcW" firstAttribute="centerY" secondItem="H9f-6P-wpM" secondAttribute="centerY" id="2jW-Q2-7dB"/>
-                    <constraint firstItem="p1a-3b-hcW" firstAttribute="trailing" secondItem="H9f-6P-wpM" secondAttribute="trailing" constant="-16" id="p0Q-3P-zc4"/>
+                    <constraint firstItem="b3S-g8-MjF" firstAttribute="trailing" secondItem="H9f-6P-wpM" secondAttribute="trailing" constant="-16" id="5Yb-x2-MmR"/>
+                    <constraint firstItem="b3S-g8-MjF" firstAttribute="centerY" secondItem="H9f-6P-wpM" secondAttribute="centerY" id="F7t-cC-t7g"/>
+                    <constraint firstItem="p1a-3b-hcW" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="b3S-g8-MjF" secondAttribute="leading" constant="-8" id="m7Q-8r-YpA"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="keywordLabel" destination="p1a-3b-hcW" id="u6B-kI-nra"/>
+                <outlet property="dateLabel" destination="b3S-g8-MjF" id="y0d-A4-UcK"/>
             </connections>
             <point key="canvasLocation" x="-155" y="10"/>
         </tableViewCell>

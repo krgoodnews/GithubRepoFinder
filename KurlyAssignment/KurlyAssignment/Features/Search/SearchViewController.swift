@@ -13,32 +13,19 @@ final class SearchViewController: UIViewController {
 
     // MARK: - UI Component
 
+    private enum KeywordListMode {
+        case recent
+        case autocomplete
+    }
+
     private var footerContainerView: UIView?
+    private var displayedKeywords: [RecentKeyword] = []
+    private var currentQuery: String = ""
+    private var shouldIgnoreNextSearchResultsUpdate: Bool = false
+    private var keywordListMode: KeywordListMode = .recent
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var emptyView: UIStackView!
-//    private let emptyView: UIView = {
-//        let container = UIView()
-//        container.translatesAutoresizingMaskIntoConstraints = false
-//
-//        let label = UILabel()
-//        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "검색어를 입력해주세요"
-//        label.textColor = .secondaryLabel
-//        label.font = .preferredFont(forTextStyle: .body)
-//        label.textAlignment = .center
-//        label.numberOfLines = 0
-//
-//        container.addSubview(label)
-//
-//        NSLayoutConstraint.activate([
-//            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
-//            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
-//            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
-//        ])
-//
-//        return container
-//    }()
 
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: resultsViewController)
@@ -59,6 +46,9 @@ final class SearchViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationItem.largeTitleDisplayMode = .always
+        navigationItem.title = "SEARCH"
+        navigationItem.largeTitleDisplayMode = .always
         view.backgroundColor = .systemBackground
         title = "Search"
 
@@ -73,6 +63,7 @@ final class SearchViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
+        guard keywordListMode == .recent else { return }
         guard let footerContainerView else { return }
         if footerContainerView.frame.width != tableView.bounds.width {
             footerContainerView.frame.size.width = tableView.bounds.width
@@ -97,9 +88,7 @@ final class SearchViewController: UIViewController {
         tableView.tableFooterView = footerView
 
         // 최초 진입 시에도 상태가 맞도록 1회 반영(Combine 초기 emit이 안 오는 케이스 방어)
-        let hasKeywords = viewModel.recentKeywords.isEmpty == false
-        tableView.isHidden = !hasKeywords
-        emptyView.isHidden = hasKeywords
+        updateKeywordListUI(query: "")
     }
 
     private func makeTableFooterView() -> UIView {
@@ -140,14 +129,7 @@ final class SearchViewController: UIViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] keywords in
                 guard let self else { return }
-                let hasKeywords = keywords.isEmpty == false
-
-                self.tableView.isHidden = !hasKeywords
-                self.emptyView.isHidden = hasKeywords
-
-                self.tableView.tableFooterView = self.footerContainerView
-
-                self.tableView.reloadData()
+                self.updateKeywordListUI(query: self.currentQuery)
             }
             .store(in: &cancellables)
 
@@ -163,6 +145,31 @@ final class SearchViewController: UIViewController {
         // iOS 15+에서 제공되는 API로, 결과 컨트롤러 노출 여부를 제어할 수 있습니다.
         searchController.showsSearchResultsController = isShowing
     }
+
+    private func updateKeywordListUI(query: String) {
+        currentQuery = query
+
+        let isEditing = searchController.searchBar.searchTextField.isFirstResponder
+        if isEditing, query.isEmpty == false {
+            keywordListMode = .autocomplete
+            displayedKeywords = viewModel.autocompleteKeywords(for: query)
+        } else {
+            keywordListMode = .recent
+            displayedKeywords = viewModel.recentKeywords(limit: 10)
+        }
+
+        let hasKeywords = displayedKeywords.isEmpty == false
+        tableView.isHidden = !hasKeywords
+        emptyView.isHidden = hasKeywords
+
+        if keywordListMode == .recent {
+            tableView.tableFooterView = footerContainerView
+        } else {
+            tableView.tableFooterView = UIView(frame: .zero)
+        }
+
+        tableView.reloadData()
+    }
 }
 
 extension SearchViewController: UISearchBarDelegate {
@@ -176,30 +183,50 @@ extension SearchViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         setShowingSearchResults(false)
         resultsViewController.update(keyword: "")
+        updateKeywordListUI(query: "")
+    }
+
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        setShowingSearchResults(false)
+        updateKeywordListUI(query: (searchBar.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        updateKeywordListUI(query: (searchBar.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines))
     }
 }
 
 extension SearchViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
+        if shouldIgnoreNextSearchResultsUpdate {
+            shouldIgnoreNextSearchResultsUpdate = false
+            return
+        }
+
+        // 검색 결과 화면이 이미 떠 있고(검색 버튼을 누른 상태),
+        // 사용자가 입력 중이 아니라면(= 자동완성 노출 시점이 아님) 여기서 상태를 건드리지 않습니다.
+        if searchController.showsSearchResultsController,
+           searchController.searchBar.searchTextField.isFirstResponder == false {
+            return
+        }
+
         let keyword = (searchController.searchBar.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
 
-        if keyword.isEmpty {
-            setShowingSearchResults(false)
-            resultsViewController.update(keyword: "")
-        } else {
-            setShowingSearchResults(true)
-            resultsViewController.update(keyword: keyword)
-        }
+        // 입력 중(검색 버튼 누르기 전)에는 결과(API) 대신 자동완성만 노출합니다.
+        setShowingSearchResults(false)
+        resultsViewController.update(keyword: "")
+        updateKeywordListUI(query: keyword)
     }
 }
 
 extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        viewModel.recentKeywords.count
+        displayedKeywords.count
     }
 
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard viewModel.recentKeywords.isEmpty == false else { return nil }
+        guard keywordListMode == .recent else { return nil }
+        guard displayedKeywords.isEmpty == false else { return nil }
 
         let container = UIView()
         container.backgroundColor = .systemBackground
@@ -222,11 +249,13 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        viewModel.recentKeywords.isEmpty ? .leastNonzeroMagnitude : 44
+        guard keywordListMode == .recent else { return .leastNonzeroMagnitude }
+        return displayedKeywords.isEmpty ? .leastNonzeroMagnitude : 44
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let item = viewModel.recentKeywords[indexPath.row]
+        guard keywordListMode == .recent else { return nil }
+        let item = displayedKeywords[indexPath.row]
 
         let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
             self?.viewModel.deleteRecentKeyword(keyword: item.keyword)
@@ -237,11 +266,16 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let item = viewModel.recentKeywords[indexPath.row]
+        let item = displayedKeywords[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: RecentKeywordCell.reuseIdentifier, for: indexPath)
 
         if let keywordCell = cell as? RecentKeywordCell {
-            keywordCell.configure(keyword: item.keyword)
+            switch keywordListMode {
+            case .recent:
+                keywordCell.configure(keyword: item.keyword, searchedAt: nil)
+            case .autocomplete:
+                keywordCell.configure(keyword: item.keyword, searchedAt: item.searchedAt)
+            }
             return keywordCell
         }
 
@@ -251,7 +285,7 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
 
-        let item = viewModel.recentKeywords[indexPath.row]
+        let item = displayedKeywords[indexPath.row]
         viewModel.selectRecentKeyword(keyword: item.keyword)
     }
 }
@@ -261,6 +295,7 @@ extension SearchViewController {
         let trimmed = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
         guard trimmed.isEmpty == false else { return }
 
+        shouldIgnoreNextSearchResultsUpdate = true
         searchController.searchBar.text = trimmed
         searchController.isActive = true
         setShowingSearchResults(true)
