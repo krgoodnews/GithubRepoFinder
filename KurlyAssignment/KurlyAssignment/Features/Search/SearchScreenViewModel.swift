@@ -84,3 +84,4 @@ final class SearchHomeViewModel {
         showSearchResultsSubject.send(trimmed)
     }
 }
+

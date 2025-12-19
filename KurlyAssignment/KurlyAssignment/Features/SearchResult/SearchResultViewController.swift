@@ -14,6 +14,11 @@ final class SearchResultViewController: UIViewController {
     private let viewModel = RepositorySearchViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let querySubject = PassthroughSubject<String, Never>()
+    private let imageLoader = ImageLoader.shared
+    private enum Const {
+        static let repositoryCellReuseIdentifier = "RepositoryCell"
+        static let avatarSize: CGFloat = 40
+    }
     
     private let tableFooterActivityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
@@ -50,8 +55,7 @@ final class SearchResultViewController: UIViewController {
         tableView.tableFooterView = UIView()
         tableView.keyboardDismissMode = .onDrag
 
-        let cellNib = UINib(nibName: "RepositoryCell", bundle: Bundle(for: RepositoryCell.self))
-        tableView.register(cellNib, forCellReuseIdentifier: RepositoryCell.reuseIdentifier)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Const.repositoryCellReuseIdentifier)
     }
 
     private func bind() {
@@ -144,10 +148,36 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let repo = viewModel.repositories[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: RepositoryCell.reuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Const.repositoryCellReuseIdentifier, for: indexPath)
+        cell.tag = repo.id
 
-        if let repositoryCell = cell as? RepositoryCell {
-            repositoryCell.configure(with: repo)
+        var content = UIListContentConfiguration.subtitleCell()
+        content.text = repo.name
+        content.secondaryText = repo.owner.login
+
+        content.image = UIImage(systemName: "photo")
+        content.imageProperties.tintColor = .tertiaryLabel
+        content.imageProperties.maximumSize = CGSize(width: Const.avatarSize, height: Const.avatarSize)
+        content.imageProperties.reservedLayoutSize = CGSize(width: Const.avatarSize, height: Const.avatarSize)
+        content.imageProperties.cornerRadius = Const.avatarSize / 2
+
+        cell.contentConfiguration = content
+
+        let expectedRepositoryID = repo.id
+        let avatarURL = repo.owner.avatarURL
+
+        Task { [weak self, weak cell] in
+            guard let self else { return }
+            guard let image = await self.imageLoader.loadImage(url: avatarURL) else { return }
+
+            await MainActor.run {
+                guard let cell else { return }
+                guard cell.tag == expectedRepositoryID else { return }
+
+                var updated = content
+                updated.image = image
+                cell.contentConfiguration = updated
+            }
         }
 
         return cell
