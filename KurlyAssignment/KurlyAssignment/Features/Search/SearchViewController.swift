@@ -49,7 +49,11 @@ final class SearchViewController: UIViewController {
         return controller
     }()
 
-    private let resultsViewController = SearchResultViewController()
+    private lazy var resultsViewController: SearchResultViewController = {
+        let storyboard = UIStoryboard(name: "Main", bundle: Bundle(for: SearchViewController.self))
+        let viewController = storyboard.instantiateViewController(withIdentifier: "SearchResultViewController")
+        return (viewController as? SearchResultViewController) ?? SearchResultViewController()
+    }()
     private let viewModel = SearchHomeViewModel()
     private var cancellables = Set<AnyCancellable>()
 

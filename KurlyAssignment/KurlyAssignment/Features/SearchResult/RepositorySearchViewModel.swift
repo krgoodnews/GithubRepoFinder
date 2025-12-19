@@ -20,6 +20,13 @@ final class RepositorySearchViewModel {
     @Published private(set) var isLoadingNextPage: Bool = false
     @Published private(set) var errorMessage: String?
 
+    private static let totalCountFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.locale = Locale(identifier: "ko_KR")
+        return formatter
+    }()
+
     private let service: GitHubSearchServiceProtocol
     private var requestCancellable: AnyCancellable?
 
@@ -31,6 +38,11 @@ final class RepositorySearchViewModel {
 
     init(service: GitHubSearchServiceProtocol = GitHubSearchService()) {
         self.service = service
+    }
+
+    private func formattedTotalCountText(_ totalCount: Int) -> String {
+        let formatted = Self.totalCountFormatter.string(from: NSNumber(value: totalCount)) ?? "\(totalCount)"
+        return "\(formatted)개 저장소"
     }
 
     func setKeyword(_ keyword: String) {
@@ -132,7 +144,7 @@ final class RepositorySearchViewModel {
             } receiveValue: { [weak self] response in
                 guard let self else { return }
                 self.totalCount = response.totalCount
-                self.totalCountText = "총 \(response.totalCount)개"
+                self.totalCountText = self.formattedTotalCountText(response.totalCount)
 
                 self.currentKeyword = keyword
                 self.currentPage = page

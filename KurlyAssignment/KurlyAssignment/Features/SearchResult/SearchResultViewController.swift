@@ -22,27 +22,9 @@ final class SearchResultViewController: UIViewController {
         return indicator
     }()
 
-    private let totalCountLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline)
-        label.textColor = .label
-        label.numberOfLines = 1
-        return label
-    }()
-
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.estimatedRowHeight = 64
-        tableView.tableFooterView = UIView()
-        tableView.keyboardDismissMode = .onDrag
-        return tableView
-    }()
-
-    private let activityIndicator: UIActivityIndicatorView = {
-        let indicator = UIActivityIndicatorView(style: .medium)
-        indicator.hidesWhenStopped = true
-        return indicator
-    }()
+    @IBOutlet private weak var totalCountLabel: UILabel!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,32 +40,18 @@ final class SearchResultViewController: UIViewController {
     }
 
     private func configureViews() {
-        totalCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        totalCountLabel.font = .preferredFont(forTextStyle: .headline)
+        totalCountLabel.textColor = .secondaryLabel
+        totalCountLabel.numberOfLines = 1
 
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.estimatedRowHeight = 64
+        tableView.tableFooterView = UIView()
+        tableView.keyboardDismissMode = .onDrag
+
         let cellNib = UINib(nibName: "RepositoryCell", bundle: Bundle(for: RepositoryCell.self))
         tableView.register(cellNib, forCellReuseIdentifier: RepositoryCell.reuseIdentifier)
-
-        let stackView = UIStackView(arrangedSubviews: [totalCountLabel, tableView])
-        stackView.axis = .vertical
-        stackView.spacing = 8
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(stackView)
-        view.addSubview(activityIndicator)
-
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
     }
 
     private func bind() {
