@@ -2,7 +2,7 @@
 //  RecentKeywordStore.swift
 //  KurlyAssignment
 //
-//  Created by Cursor on 12/18/25.
+//  Created by Goodnews on 12/18/25.
 //
 
 import Combine
@@ -12,7 +12,6 @@ final class RecentKeywordStore {
     @Published private(set) var recentKeywords: [RecentKeyword] = []
 
     private enum Const {
-        static let maxCount = 10
         static let userDefaultsKey = "recent_keywords_v1"
     }
 
@@ -30,10 +29,6 @@ final class RecentKeywordStore {
         // 동일 키워드는 최신으로 갱신
         recentKeywords.removeAll { $0.keyword.caseInsensitiveCompare(trimmed) == .orderedSame }
         recentKeywords.insert(RecentKeyword(keyword: trimmed, searchedAt: Date()), at: 0)
-
-        if recentKeywords.count > Const.maxCount {
-            recentKeywords = Array(recentKeywords.prefix(Const.maxCount))
-        }
 
         save()
     }
@@ -59,7 +54,7 @@ final class RecentKeywordStore {
 
         do {
             let decoded = try JSONDecoder().decode([RecentKeyword].self, from: data)
-            recentKeywords = Array(decoded.prefix(Const.maxCount))
+            recentKeywords = decoded
         } catch {
             recentKeywords = []
         }

@@ -2,7 +2,7 @@
 //  HTTPClient.swift
 //  KurlyAssignment
 //
-//  Created by Cursor on 12/18/25.
+//  Created by Goodnews on 12/18/25.
 //
 
 import Combine

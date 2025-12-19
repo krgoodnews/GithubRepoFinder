@@ -11,35 +11,25 @@ import UIKit
 // MARK: - Search Results
 
 final class SearchResultViewController: UIViewController {
-    private enum Const {
-        static let cellReuseIdentifier = "RepositoryCell"
-    }
-
     private let viewModel = RepositorySearchViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let querySubject = PassthroughSubject<String, Never>()
-
-    private let totalCountLabel: UILabel = {
-        let label = UILabel()
-        label.font = .preferredFont(forTextStyle: .headline)
-        label.textColor = .label
-        label.numberOfLines = 1
-        return label
-    }()
-
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.estimatedRowHeight = 64
-        tableView.tableFooterView = UIView()
-        tableView.keyboardDismissMode = .onDrag
-        return tableView
-    }()
-
-    private let activityIndicator: UIActivityIndicatorView = {
+    private let imageLoader = ImageLoader.shared
+    private enum Const {
+        static let repositoryCellReuseIdentifier = "RepositoryCell"
+        static let avatarSize: CGFloat = 40
+    }
+    
+    private let tableFooterActivityIndicator: UIActivityIndicatorView = {
         let indicator = UIActivityIndicatorView(style: .medium)
         indicator.hidesWhenStopped = true
+        indicator.translatesAutoresizingMaskIntoConstraints = false
         return indicator
     }()
+
+    @IBOutlet private weak var totalCountLabel: UILabel!
+    @IBOutlet private weak var tableView: UITableView!
+    @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,31 +45,17 @@ final class SearchResultViewController: UIViewController {
     }
 
     private func configureViews() {
-        totalCountLabel.translatesAutoresizingMaskIntoConstraints = false
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        activityIndicator.translatesAutoresizingMaskIntoConstraints = false
+        totalCountLabel.font = .preferredFont(forTextStyle: .headline)
+        totalCountLabel.textColor = .secondaryLabel
+        totalCountLabel.numberOfLines = 1
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Const.cellReuseIdentifier)
+        tableView.estimatedRowHeight = 64
+        tableView.tableFooterView = UIView()
+        tableView.keyboardDismissMode = .onDrag
 
-        let stackView = UIStackView(arrangedSubviews: [totalCountLabel, tableView])
-        stackView.axis = .vertical
-        stackView.spacing = 8
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-
-        view.addSubview(stackView)
-        view.addSubview(activityIndicator)
-
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
-            stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            activityIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            activityIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Const.repositoryCellReuseIdentifier)
     }
 
     private func bind() {
@@ -107,6 +83,14 @@ final class SearchResultViewController: UIViewController {
                 }
             }
             .store(in: &cancellables)
+        
+        viewModel.$isLoadingNextPage
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isLoading in
+                guard let self else { return }
+                self.updateTableFooterLoading(isLoading: isLoading)
+            }
+            .store(in: &cancellables)
 
         viewModel.$errorMessage
             .compactMap { $0 }
@@ -124,12 +108,35 @@ final class SearchResultViewController: UIViewController {
         querySubject
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .removeDuplicates()
-            .debounce(for: .milliseconds(350), scheduler: DispatchQueue.main)
             .sink { [weak self] keyword in
                 guard let self else { return }
                 self.viewModel.setKeyword(keyword)
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateTableFooterLoading(isLoading: Bool) {
+        if isLoading {
+            let footer = UIView(frame: CGRect(x: 0, y: 0, width: tableView.bounds.width, height: 56))
+            footer.addSubview(tableFooterActivityIndicator)
+            
+            NSLayoutConstraint.activate([
+                tableFooterActivityIndicator.centerXAnchor.constraint(equalTo: footer.centerXAnchor),
+                tableFooterActivityIndicator.centerYAnchor.constraint(equalTo: footer.centerYAnchor)
+            ])
+            
+            tableView.tableFooterView = footer
+            tableFooterActivityIndicator.startAnimating()
+        } else {
+            tableFooterActivityIndicator.stopAnimating()
+            tableView.tableFooterView = UIView()
+        }
+    }
+
+    private func openRepositoryURL(_ url: URL) {
+        let webViewController = WebViewController(url: url)
+        let navigationController = UINavigationController(rootViewController: webViewController)
+        present(navigationController, animated: true)
     }
 }
 
@@ -139,14 +146,40 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Const.cellReuseIdentifier, for: indexPath)
         let repo = viewModel.repositories[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: Const.repositoryCellReuseIdentifier, for: indexPath)
+        cell.tag = repo.id
 
         var content = UIListContentConfiguration.subtitleCell()
         content.text = repo.name
         content.secondaryText = repo.owner.login
+
+        content.image = UIImage(systemName: "photo")
+        content.imageProperties.tintColor = .tertiaryLabel
+        content.imageProperties.maximumSize = CGSize(width: Const.avatarSize, height: Const.avatarSize)
+        content.imageProperties.reservedLayoutSize = CGSize(width: Const.avatarSize, height: Const.avatarSize)
+        content.imageProperties.cornerRadius = Const.avatarSize / 2
+        content.imageProperties.strokeColor = .tertiaryLabel.withAlphaComponent(0.5)
+        content.imageProperties.strokeWidth = 0.5
+
         cell.contentConfiguration = content
-        cell.accessoryType = .none
+
+        let expectedRepositoryID = repo.id
+        let avatarURL = repo.owner.avatarURL
+
+        Task { [weak self, weak cell] in
+            guard let self else { return }
+            guard let image = await self.imageLoader.loadImage(url: avatarURL) else { return }
+
+            await MainActor.run {
+                guard let cell else { return }
+                guard cell.tag == expectedRepositoryID else { return }
+
+                var updated = content
+                updated.image = image
+                cell.contentConfiguration = updated
+            }
+        }
 
         return cell
     }
@@ -157,5 +190,7 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        let repo = viewModel.repositories[indexPath.row]
+        openRepositoryURL(repo.htmlURL)
     }
 }
