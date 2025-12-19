@@ -6,6 +6,28 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E6F000012F00000100000001 /* GitHubSearchResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D469B2EF54D0100A44513 /* GitHubSearchResponse.swift */; };
+		E6F000012F00000100000002 /* GitHubSearchService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D469D2EF54D0100A44513 /* GitHubSearchService.swift */; };
+		E6F000012F00000100000003 /* HTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D469E2EF54D0100A44513 /* HTTPClient.swift */; };
+		E6F000012F00000100000004 /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D469F2EF54D0100A44513 /* NetworkError.swift */; };
+		E6F000012F00000100000005 /* RecentKeywordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46A12EF54D0100A44513 /* RecentKeywordStore.swift */; };
+		E6F000012F00000100000006 /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46A32EF54D0100A44513 /* ImageLoader.swift */; };
+		E6F000012F00000100000007 /* ImageMemoryCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46A42EF54D0100A44513 /* ImageMemoryCache.swift */; };
+		E6F000012F00000100000008 /* SearchScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46A82EF54D0100A44513 /* SearchScreenViewModel.swift */; };
+		E6F000012F00000100000009 /* SearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46A92EF54D0100A44513 /* SearchViewController.swift */; };
+		E6F000012F0000010000000A /* SearchViewController+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46AA2EF54D0100A44513 /* SearchViewController+UITableView.swift */; };
+		E6F000012F0000010000000B /* RepositorySearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46AD2EF54D0100A44513 /* RepositorySearchViewModel.swift */; };
+		E6F000012F0000010000000C /* SearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46AE2EF54D0100A44513 /* SearchResultViewController.swift */; };
+		E6F000012F0000010000000D /* WebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46B02EF54D0100A44513 /* WebViewController.swift */; };
+		E6F000012F0000010000000E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46B32EF54D0100A44513 /* AppDelegate.swift */; };
+		E6F000012F0000010000000F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46BA2EF54D0100A44513 /* SceneDelegate.swift */; };
+		E6F000012F00000100000010 /* GithubRepoFinderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E63D46BC2EF54D0100A44513 /* GithubRepoFinderTests.swift */; };
+		E6F000012F00000100000013 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E63D46B42EF54D0100A44513 /* Assets.xcassets */; };
+		E6F000012F00000100000014 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E63D46B72EF54D0100A44513 /* LaunchScreen.storyboard */; };
+		E6F000012F00000100000015 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E63D46B92EF54D0100A44513 /* Main.storyboard */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		E6680E332EF40AE200D106C0 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -24,41 +46,30 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		E63D469B2EF54D0100A44513 /* GitHubSearchResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSearchResponse.swift; sourceTree = "<group>"; };
+		E63D469D2EF54D0100A44513 /* GitHubSearchService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GitHubSearchService.swift; sourceTree = "<group>"; };
+		E63D469E2EF54D0100A44513 /* HTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPClient.swift; sourceTree = "<group>"; };
+		E63D469F2EF54D0100A44513 /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		E63D46A12EF54D0100A44513 /* RecentKeywordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentKeywordStore.swift; sourceTree = "<group>"; };
+		E63D46A32EF54D0100A44513 /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		E63D46A42EF54D0100A44513 /* ImageMemoryCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageMemoryCache.swift; sourceTree = "<group>"; };
+		E63D46A82EF54D0100A44513 /* SearchScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchScreenViewModel.swift; sourceTree = "<group>"; };
+		E63D46A92EF54D0100A44513 /* SearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewController.swift; sourceTree = "<group>"; };
+		E63D46AA2EF54D0100A44513 /* SearchViewController+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchViewController+UITableView.swift"; sourceTree = "<group>"; };
+		E63D46AD2EF54D0100A44513 /* RepositorySearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositorySearchViewModel.swift; sourceTree = "<group>"; };
+		E63D46AE2EF54D0100A44513 /* SearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultViewController.swift; sourceTree = "<group>"; };
+		E63D46B02EF54D0100A44513 /* WebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewController.swift; sourceTree = "<group>"; };
+		E63D46B32EF54D0100A44513 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		E63D46B42EF54D0100A44513 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E63D46B52EF54D0100A44513 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E63D46B62EF54D0100A44513 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		E63D46B82EF54D0100A44513 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		E63D46BA2EF54D0100A44513 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		E63D46BC2EF54D0100A44513 /* GithubRepoFinderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubRepoFinderTests.swift; sourceTree = "<group>"; };
 		E6680E1C2EF40AE000D106C0 /* GithubRepoFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubRepoFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6680E322EF40AE200D106C0 /* GithubRepoFinderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GithubRepoFinderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E6680E3C2EF40AE200D106C0 /* GithubRepoFinderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GithubRepoFinderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E6680E442EF40AE200D106C0 /* Exceptions for "KurlyAssignment" folder in "GithubRepoFinder" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = E6680E1B2EF40AE000D106C0 /* GithubRepoFinder */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		E6680E1E2EF40AE000D106C0 /* KurlyAssignment */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E6680E442EF40AE200D106C0 /* Exceptions for "KurlyAssignment" folder in "GithubRepoFinder" target */,
-			);
-			path = KurlyAssignment;
-			sourceTree = "<group>";
-		};
-		E6680E352EF40AE200D106C0 /* KurlyAssignmentTests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = KurlyAssignmentTests;
-			sourceTree = "<group>";
-		};
-		E6680E3F2EF40AE200D106C0 /* KurlyAssignmentUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = KurlyAssignmentUITests;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		E6680E192EF40AE000D106C0 /* Frameworks */ = {
@@ -85,12 +96,133 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E63D469C2EF54D0100A44513 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				E63D469B2EF54D0100A44513 /* GitHubSearchResponse.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		E63D46A02EF54D0100A44513 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				E63D469D2EF54D0100A44513 /* GitHubSearchService.swift */,
+				E63D469E2EF54D0100A44513 /* HTTPClient.swift */,
+				E63D469F2EF54D0100A44513 /* NetworkError.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
+		E63D46A22EF54D0100A44513 /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46A12EF54D0100A44513 /* RecentKeywordStore.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		E63D46A52EF54D0100A44513 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46A32EF54D0100A44513 /* ImageLoader.swift */,
+				E63D46A42EF54D0100A44513 /* ImageMemoryCache.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		E63D46A62EF54D0100A44513 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				E63D469C2EF54D0100A44513 /* Models */,
+				E63D46A02EF54D0100A44513 /* Network */,
+				E63D46A22EF54D0100A44513 /* Storage */,
+				E63D46A52EF54D0100A44513 /* Utils */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E63D46A72EF54D0100A44513 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E63D46AB2EF54D0100A44513 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46A72EF54D0100A44513 /* Views */,
+				E63D46A82EF54D0100A44513 /* SearchScreenViewModel.swift */,
+				E63D46A92EF54D0100A44513 /* SearchViewController.swift */,
+				E63D46AA2EF54D0100A44513 /* SearchViewController+UITableView.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
+		E63D46AC2EF54D0100A44513 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E63D46AF2EF54D0100A44513 /* SearchResult */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46AC2EF54D0100A44513 /* Views */,
+				E63D46AD2EF54D0100A44513 /* RepositorySearchViewModel.swift */,
+				E63D46AE2EF54D0100A44513 /* SearchResultViewController.swift */,
+			);
+			path = SearchResult;
+			sourceTree = "<group>";
+		};
+		E63D46B12EF54D0100A44513 /* Web */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46B02EF54D0100A44513 /* WebViewController.swift */,
+			);
+			path = Web;
+			sourceTree = "<group>";
+		};
+		E63D46B22EF54D0100A44513 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46AB2EF54D0100A44513 /* Search */,
+				E63D46AF2EF54D0100A44513 /* SearchResult */,
+				E63D46B12EF54D0100A44513 /* Web */,
+			);
+			path = Features;
+			sourceTree = "<group>";
+		};
+		E63D46BB2EF54D0100A44513 /* GithubRepoFinder */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46A62EF54D0100A44513 /* Core */,
+				E63D46B22EF54D0100A44513 /* Features */,
+				E63D46B32EF54D0100A44513 /* AppDelegate.swift */,
+				E63D46B42EF54D0100A44513 /* Assets.xcassets */,
+				E63D46B52EF54D0100A44513 /* Info.plist */,
+				E63D46B72EF54D0100A44513 /* LaunchScreen.storyboard */,
+				E63D46B92EF54D0100A44513 /* Main.storyboard */,
+				E63D46BA2EF54D0100A44513 /* SceneDelegate.swift */,
+			);
+			path = GithubRepoFinder;
+			sourceTree = "<group>";
+		};
+		E63D46BD2EF54D0100A44513 /* GithubRepoFinderTests */ = {
+			isa = PBXGroup;
+			children = (
+				E63D46BC2EF54D0100A44513 /* GithubRepoFinderTests.swift */,
+			);
+			path = GithubRepoFinderTests;
+			sourceTree = "<group>";
+		};
 		E6680E132EF40AE000D106C0 = {
 			isa = PBXGroup;
 			children = (
-				E6680E1E2EF40AE000D106C0 /* KurlyAssignment */,
-				E6680E352EF40AE200D106C0 /* KurlyAssignmentTests */,
-				E6680E3F2EF40AE200D106C0 /* KurlyAssignmentUITests */,
+				E63D46BB2EF54D0100A44513 /* GithubRepoFinder */,
+				E63D46BD2EF54D0100A44513 /* GithubRepoFinderTests */,
 				E6680E1D2EF40AE000D106C0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -120,9 +252,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				E6680E1E2EF40AE000D106C0 /* KurlyAssignment */,
-			);
 			name = GithubRepoFinder;
 			packageProductDependencies = (
 			);
@@ -143,9 +272,6 @@
 			dependencies = (
 				E6680E342EF40AE200D106C0 /* PBXTargetDependency */,
 			);
-			fileSystemSynchronizedGroups = (
-				E6680E352EF40AE200D106C0 /* KurlyAssignmentTests */,
-			);
 			name = GithubRepoFinderTests;
 			packageProductDependencies = (
 			);
@@ -165,9 +291,6 @@
 			);
 			dependencies = (
 				E6680E3E2EF40AE200D106C0 /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				E6680E3F2EF40AE200D106C0 /* KurlyAssignmentUITests */,
 			);
 			name = GithubRepoFinderUITests;
 			packageProductDependencies = (
@@ -225,6 +348,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6F000012F00000100000013 /* Assets.xcassets in Resources */,
+				E6F000012F00000100000014 /* LaunchScreen.storyboard in Resources */,
+				E6F000012F00000100000015 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -249,6 +375,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6F000012F00000100000001 /* GitHubSearchResponse.swift in Sources */,
+				E6F000012F00000100000002 /* GitHubSearchService.swift in Sources */,
+				E6F000012F00000100000003 /* HTTPClient.swift in Sources */,
+				E6F000012F00000100000004 /* NetworkError.swift in Sources */,
+				E6F000012F00000100000005 /* RecentKeywordStore.swift in Sources */,
+				E6F000012F00000100000006 /* ImageLoader.swift in Sources */,
+				E6F000012F00000100000007 /* ImageMemoryCache.swift in Sources */,
+				E6F000012F00000100000008 /* SearchScreenViewModel.swift in Sources */,
+				E6F000012F00000100000009 /* SearchViewController.swift in Sources */,
+				E6F000012F0000010000000A /* SearchViewController+UITableView.swift in Sources */,
+				E6F000012F0000010000000B /* RepositorySearchViewModel.swift in Sources */,
+				E6F000012F0000010000000C /* SearchResultViewController.swift in Sources */,
+				E6F000012F0000010000000D /* WebViewController.swift in Sources */,
+				E6F000012F0000010000000E /* AppDelegate.swift in Sources */,
+				E6F000012F0000010000000F /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,6 +397,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6F000012F00000100000010 /* GithubRepoFinderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -281,6 +423,25 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		E63D46B72EF54D0100A44513 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E63D46B62EF54D0100A44513 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		E63D46B92EF54D0100A44513 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				E63D46B82EF54D0100A44513 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		E6680E462EF40AE200D106C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -291,10 +452,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 827YX997NH;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KurlyAssignment/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "컬리-국윤수";
+				INFOPLIST_FILE = GithubRepoFinder/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RepoFinder;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -303,11 +464,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.krgoodnews.KurlyAssignment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krgoodnews.GithubRepoFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -324,10 +484,10 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 827YX997NH;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KurlyAssignment/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "컬리-국윤수";
+				INFOPLIST_FILE = GithubRepoFinder/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = RepoFinder;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UILaunchStoryboardName = "";
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -336,11 +496,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.krgoodnews.KurlyAssignment;
+				PRODUCT_BUNDLE_IDENTIFIER = com.krgoodnews.GithubRepoFinder;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
@@ -487,7 +646,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubRepoFinder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GithubRepoFinder";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubRepoFinder.app/GithubRepoFinder";
 			};
 			name = Debug;
 		};
@@ -509,7 +668,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubRepoFinder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GithubRepoFinder";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubRepoFinder.app/GithubRepoFinder";
 			};
 			name = Release;
 		};
