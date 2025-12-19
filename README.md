@@ -14,40 +14,45 @@ GitHub Search API를 이용해 **저장소 검색 → 검색 결과 리스트 �
 2. Scheme `GithubRepoFinder`를 선택한 뒤 실행합니다.
 
 ---
-
-## 요구사항 매핑
+<br>
+## 구현 사항
 
 ### 1) 검색 화면
-
-- **검색어 입력 후 결과 표시**: 검색 버튼 클릭 시 검색 결과 화면을 노출하고 검색을 시작합니다.
-- **검색어가 비어있으면 최근 검색어 최대 10개 노출**: 입력이 비어있거나 키보드가 내려간 상태에서는 최근 검색어(최대 10개)를 보여줍니다.
-- **최근 검색어 내림차순(최신 우선)**: 저장 시점 기준으로 최신을 앞에 두도록 관리합니다.
-- **최근 검색어 삭제 / 전체 삭제**: 스와이프 삭제 및 footer의 “전체 삭제”를 제공합니다.
-- **앱 재시작 후에도 유지**: `UserDefaults`에 저장합니다.
-- **최근 검색어 선택 시 결과 표시**: 최근 검색어 탭 시 즉시 검색 결과 화면으로 이동합니다.
+<p>
+<img width="300" alt="CleanShot 2025-12-19 at 19 06 05@2x" src="https://github.com/user-attachments/assets/12184181-5538-44d4-9cbb-ce1529c7867b" />
+<img width="300" alt="CleanShot 2025-12-19 at 19 06 31@2x" src="https://github.com/user-attachments/assets/2c6ffe96-30b4-4b69-a3ae-cac5217cad47" />
+</p>
 
 [추가 구현]
-- **자동완성(최근 검색어 기반)**: 입력 중(키보드 올라온 상태 + 1글자 이상)에는 최근 검색어에서 prefix/contains 매칭으로 자동완성을 제공합니다.
-- **자동완성에 검색 날짜 표시**: 자동완성 모드에서 `MM.dd` 형태로 날짜를 함께 노출합니다.
+1. 검색어 입력 시, 자동완성을 보여줍니다.
+2. 자동완성 노출 시, 검색 날짜를 같이 보여줍니다.
+3. 자동완성은 최근 검색어에서 추출하여 사용합니다.
+<br>
 
 ### 2) 검색 결과 화면
-
-- **List 형태로 결과 표시**: UITableView로 결과 목록을 표시합니다.
-- **총 검색 결과 수 표시**: `total_count`를 받아 “N개 저장소” 형태로 표시합니다.
-- **저장소 정보 표시**
-  - Thumbnail: `owner.avatar_url`
-  - Title: `name`
-  - Description: `owner.login`
-- **결과 선택 시 WebView 이동**: 선택한 저장소의 `html_url`을 WKWebView로 로드합니다.
+<p>
+<img width="300" alt="CleanShot 2025-12-19 at 19 07 22@2x" src="https://github.com/user-attachments/assets/9e51c53f-53bb-4708-b4eb-66aafab615d4" />
+<img width="300" alt="CleanShot 2025-12-19 at 19 07 27@2x" src="https://github.com/user-attachments/assets/7131b5bc-dbb2-4f9a-83ff-59d87e66034c" />
+</p>
+<br>
 
 [추가 구현]
 - **중간 프리패치**: 리스트가 끝에 가까워지면 다음 페이지를 호출합니다.
+
 - **Next Page 로딩 상태**: 다음 페이지 로딩 시 footer에 indicator를 노출합니다.
+<br>
 
 ### 3) API
 
 - Endpoint: `[GET] https://api.github.com/search/repositories?q={keyword}&page={page}`
+<br>
 
+### 4) 다크모드 & Dynamic Type 지원
+<img width="300" alt="CleanShot 2025-12-19 at 19 10 09@2x" src="https://github.com/user-attachments/assets/cee96970-8c43-4dd5-84c3-a54f444a8712" />
+
+- Custom Cell이 아닌 `UIListConfiguration` 사용으로 큰 글자에서도 자연스러운 레이아웃을 제공합니다.
+<br>
+<br>
 ---
 
 ## 기술 스택
@@ -58,8 +63,8 @@ GitHub Search API를 이용해 **저장소 검색 → 검색 결과 리스트 �
 - **Reactive**: Combine
 - **Networking**: URLSession (`Combine` 기반 `dataTaskPublisher`)
 - **WebView**: WebKit (WKWebView)
-
 ---
+<br>
 
 ## 프로젝트 구조
 
@@ -78,6 +83,7 @@ GithubRepoFinder/
 ```
 
 ---
+<br>
 
 ## 구현 포인트
 
