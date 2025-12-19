@@ -8,7 +8,11 @@
 import Combine
 import Foundation
 
-final class SearchScreenViewModel {
+/// 검색 화면(최근 검색어) 전용 ViewModel
+///
+/// - 최근 검색어 관리(추가/삭제/전체삭제)
+/// - 검색 트리거 이벤트 방출
+final class SearchHomeViewModel {
     struct Output {
         let showSearchResults: AnyPublisher<String, Never>
     }

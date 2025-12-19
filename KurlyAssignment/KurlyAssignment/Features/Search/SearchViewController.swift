@@ -32,7 +32,7 @@ final class SearchViewController: UIViewController {
     }()
 
     private let resultsViewController = SearchResultViewController()
-    private let viewModel = SearchScreenViewModel()
+    private let viewModel = SearchHomeViewModel()
     private var cancellables = Set<AnyCancellable>()
 
     override func viewDidLoad() {

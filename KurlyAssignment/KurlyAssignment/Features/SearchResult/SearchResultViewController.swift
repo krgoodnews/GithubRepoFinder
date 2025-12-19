@@ -5,8 +5,8 @@
 //  Created by Goodnews on 12/18/25.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 // MARK: - Search Results
 
@@ -15,7 +15,7 @@ final class SearchResultViewController: UIViewController {
         static let cellReuseIdentifier = "RepositoryCell"
     }
 
-    private let viewModel = SearchViewModel()
+    private let viewModel = RepositorySearchViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let querySubject = PassthroughSubject<String, Never>()
 
@@ -127,11 +127,7 @@ final class SearchResultViewController: UIViewController {
             .debounce(for: .milliseconds(350), scheduler: DispatchQueue.main)
             .sink { [weak self] keyword in
                 guard let self else { return }
-                if keyword.isEmpty {
-                    self.viewModel.clearResults()
-                } else {
-                    self.viewModel.submitSearch(keyword: keyword)
-                }
+                self.viewModel.setKeyword(keyword)
             }
             .store(in: &cancellables)
     }
@@ -153,6 +149,10 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         cell.accessoryType = .none
 
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        viewModel.loadNextPageIfNeeded(currentIndex: indexPath.row)
     }
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
