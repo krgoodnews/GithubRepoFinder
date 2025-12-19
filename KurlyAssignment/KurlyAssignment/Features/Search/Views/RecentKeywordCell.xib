@@ -21,22 +21,14 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="w6d-Az-MqQ">
-                        <rect key="frame" x="113" y="10" width="24" height="24"/>
-                    </button>
                 </subviews>
                 <constraints>
                     <constraint firstItem="p1a-3b-hcW" firstAttribute="leading" secondItem="H9f-6P-wpM" secondAttribute="leading" constant="16" id="1eV-Fj-PRm"/>
                     <constraint firstItem="p1a-3b-hcW" firstAttribute="centerY" secondItem="H9f-6P-wpM" secondAttribute="centerY" id="2jW-Q2-7dB"/>
-                    <constraint firstItem="w6d-Az-MqQ" firstAttribute="trailing" relation="lessThanOrEqual" secondItem="H9f-6P-wpM" secondAttribute="trailing" constant="-16" id="5MG-fM-0Uj"/>
-                    <constraint firstItem="w6d-Az-MqQ" firstAttribute="centerY" secondItem="H9f-6P-wpM" secondAttribute="centerY" id="7xg-Mv-yxv"/>
-                    <constraint firstItem="w6d-Az-MqQ" firstAttribute="width" constant="24" id="B3d-ty-4Y7"/>
-                    <constraint firstItem="w6d-Az-MqQ" firstAttribute="height" constant="24" id="F7k-fj-FfK"/>
-                    <constraint firstItem="p1a-3b-hcW" firstAttribute="trailing" secondItem="w6d-Az-MqQ" secondAttribute="leading" constant="-12" id="p0Q-3P-zc4"/>
+                    <constraint firstItem="p1a-3b-hcW" firstAttribute="trailing" secondItem="H9f-6P-wpM" secondAttribute="trailing" constant="-16" id="p0Q-3P-zc4"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="deleteButton" destination="w6d-Az-MqQ" id="qC8-2P-mcE"/>
                 <outlet property="keywordLabel" destination="p1a-3b-hcW" id="u6B-kI-nra"/>
             </connections>
             <point key="canvasLocation" x="-155" y="10"/>

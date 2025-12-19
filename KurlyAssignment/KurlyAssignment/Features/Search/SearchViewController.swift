@@ -15,6 +15,29 @@ final class SearchViewController: UIViewController {
 
     private var footerContainerView: UIView?
 
+    private let emptyView: UIView = {
+        let container = UIView()
+        container.translatesAutoresizingMaskIntoConstraints = false
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "검색어를 입력해주세요"
+        label.textColor = .secondaryLabel
+        label.font = .preferredFont(forTextStyle: .body)
+        label.textAlignment = .center
+        label.numberOfLines = 0
+
+        container.addSubview(label)
+
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
+            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+        ])
+
+        return container
+    }()
+
     private let tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
         tableView.tableFooterView = UIView()
@@ -68,17 +91,25 @@ final class SearchViewController: UIViewController {
         )
 
         view.addSubview(tableView)
+        view.addSubview(emptyView)
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            emptyView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            emptyView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
         let footerView = makeTableFooterView()
         footerContainerView = footerView
         tableView.tableFooterView = footerView
+
+        emptyView.isHidden = true
     }
 
     private func makeTableFooterView() -> UIView {
@@ -117,8 +148,16 @@ final class SearchViewController: UIViewController {
     private func bind() {
         viewModel.recentKeywordsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.tableView.reloadData()
+            .sink { [weak self] keywords in
+                guard let self else { return }
+                let hasKeywords = keywords.isEmpty == false
+
+                self.tableView.isHidden = !hasKeywords
+                self.emptyView.isHidden = hasKeywords
+
+                self.tableView.tableFooterView = self.footerContainerView
+
+                self.tableView.reloadData()
             }
             .store(in: &cancellables)
 
@@ -169,14 +208,50 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
         viewModel.recentKeywords.count
     }
 
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard viewModel.recentKeywords.isEmpty == false else { return nil }
+
+        let container = UIView()
+        container.backgroundColor = .systemBackground
+
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "최근 검색"
+        label.font = .preferredFont(forTextStyle: .headline)
+        label.textColor = .label
+
+        container.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
+            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
+            label.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8),
+            label.topAnchor.constraint(equalTo: container.topAnchor, constant: 12)
+        ])
+
+        return container
+    }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        viewModel.recentKeywords.isEmpty ? .leastNonzeroMagnitude : 44
+    }
+
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        let item = viewModel.recentKeywords[indexPath.row]
+
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
+            self?.viewModel.deleteRecentKeyword(keyword: item.keyword)
+            completion(true)
+        }
+
+        return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = viewModel.recentKeywords[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: RecentKeywordCell.reuseIdentifier, for: indexPath)
 
         if let keywordCell = cell as? RecentKeywordCell {
-            keywordCell.configure(keyword: item.keyword) { [weak self] in
-                self?.viewModel.deleteRecentKeyword(keyword: item.keyword)
-            }
+            keywordCell.configure(keyword: item.keyword)
             return keywordCell
         }
 
