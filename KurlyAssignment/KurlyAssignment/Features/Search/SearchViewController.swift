@@ -13,6 +13,8 @@ final class SearchViewController: UIViewController {
 
     // MARK: - UI Component
 
+    private static let keywordCellReuseIdentifier = "KeywordCell"
+
     private enum KeywordListMode {
         case recent
         case autocomplete
@@ -23,6 +25,13 @@ final class SearchViewController: UIViewController {
     private var currentQuery: String = ""
     private var shouldIgnoreNextSearchResultsUpdate: Bool = false
     private var keywordListMode: KeywordListMode = .recent
+
+    private static let searchedAtFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "MM.dd"
+        return formatter
+    }()
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var emptyView: UIStackView!
@@ -78,10 +87,7 @@ final class SearchViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.keyboardDismissMode = .onDrag
-        tableView.register(
-            UINib(nibName: "RecentKeywordCell", bundle: Bundle(for: RecentKeywordCell.self)),
-            forCellReuseIdentifier: RecentKeywordCell.reuseIdentifier
-        )
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Self.keywordCellReuseIdentifier)
 
         let footerView = makeTableFooterView()
         footerContainerView = footerView
@@ -267,18 +273,25 @@ extension SearchViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = displayedKeywords[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: RecentKeywordCell.reuseIdentifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: Self.keywordCellReuseIdentifier, for: indexPath)
+        cell.selectionStyle = .none
 
-        if let keywordCell = cell as? RecentKeywordCell {
-            switch keywordListMode {
-            case .recent:
-                keywordCell.configure(keyword: item.keyword, searchedAt: nil)
-            case .autocomplete:
-                keywordCell.configure(keyword: item.keyword, searchedAt: item.searchedAt)
-            }
-            return keywordCell
+        var content = UIListContentConfiguration.valueCell()
+        content.text = item.keyword
+        content.textProperties.font = .preferredFont(forTextStyle: .body)
+        content.textProperties.color = .label
+
+        switch keywordListMode {
+        case .recent:
+            content.secondaryText = nil
+        case .autocomplete:
+            content.secondaryText = Self.searchedAtFormatter.string(from: item.searchedAt)
+            content.secondaryTextProperties.font = .preferredFont(forTextStyle: .footnote)
+            content.secondaryTextProperties.color = .secondaryLabel
+            content.prefersSideBySideTextAndSecondaryText = true
         }
 
+        cell.contentConfiguration = content
         return cell
     }
 
