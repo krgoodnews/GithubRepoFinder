@@ -108,7 +108,6 @@ final class SearchResultViewController: UIViewController {
         querySubject
             .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
             .removeDuplicates()
-            .debounce(for: .milliseconds(350), scheduler: DispatchQueue.main)
             .sink { [weak self] keyword in
                 guard let self else { return }
                 self.viewModel.setKeyword(keyword)
@@ -160,6 +159,8 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
         content.imageProperties.maximumSize = CGSize(width: Const.avatarSize, height: Const.avatarSize)
         content.imageProperties.reservedLayoutSize = CGSize(width: Const.avatarSize, height: Const.avatarSize)
         content.imageProperties.cornerRadius = Const.avatarSize / 2
+        content.imageProperties.strokeColor = .tertiaryLabel.withAlphaComponent(0.5)
+        content.imageProperties.strokeWidth = 0.5
 
         cell.contentConfiguration = content
 
