@@ -15,35 +15,30 @@ final class SearchViewController: UIViewController {
 
     private var footerContainerView: UIView?
 
-    private let emptyView: UIView = {
-        let container = UIView()
-        container.translatesAutoresizingMaskIntoConstraints = false
-
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "검색어를 입력해주세요"
-        label.textColor = .secondaryLabel
-        label.font = .preferredFont(forTextStyle: .body)
-        label.textAlignment = .center
-        label.numberOfLines = 0
-
-        container.addSubview(label)
-
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
-            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
-            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
-        ])
-
-        return container
-    }()
-
-    private let tableView: UITableView = {
-        let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.tableFooterView = UIView()
-        tableView.keyboardDismissMode = .onDrag
-        return tableView
-    }()
+    @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var emptyView: UIStackView!
+//    private let emptyView: UIView = {
+//        let container = UIView()
+//        container.translatesAutoresizingMaskIntoConstraints = false
+//
+//        let label = UILabel()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        label.text = "검색어를 입력해주세요"
+//        label.textColor = .secondaryLabel
+//        label.font = .preferredFont(forTextStyle: .body)
+//        label.textAlignment = .center
+//        label.numberOfLines = 0
+//
+//        container.addSubview(label)
+//
+//        NSLayoutConstraint.activate([
+//            label.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 24),
+//            label.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -24),
+//            label.centerYAnchor.constraint(equalTo: container.centerYAnchor)
+//        ])
+//
+//        return container
+//    }()
 
     private lazy var searchController: UISearchController = {
         let controller = UISearchController(searchResultsController: resultsViewController)
@@ -82,34 +77,25 @@ final class SearchViewController: UIViewController {
     }
 
     private func configureTableView() {
-        tableView.translatesAutoresizingMaskIntoConstraints = false
+        // NOTE: tableView/emptyView는 스토리보드에서 레이아웃을 잡습니다.
+        // (addSubview/constraints를 코드에서 다시 만들면 스토리보드 제약이 깨지거나 충돌할 수 있음)
+
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.keyboardDismissMode = .onDrag
         tableView.register(
             UINib(nibName: "RecentKeywordCell", bundle: Bundle(for: RecentKeywordCell.self)),
             forCellReuseIdentifier: RecentKeywordCell.reuseIdentifier
         )
 
-        view.addSubview(tableView)
-        view.addSubview(emptyView)
-
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-
-            emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            emptyView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            emptyView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            emptyView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-
         let footerView = makeTableFooterView()
         footerContainerView = footerView
         tableView.tableFooterView = footerView
 
-        emptyView.isHidden = true
+        // 최초 진입 시에도 상태가 맞도록 1회 반영(Combine 초기 emit이 안 오는 케이스 방어)
+        let hasKeywords = viewModel.recentKeywords.isEmpty == false
+        tableView.isHidden = !hasKeywords
+        emptyView.isHidden = hasKeywords
     }
 
     private func makeTableFooterView() -> UIView {
