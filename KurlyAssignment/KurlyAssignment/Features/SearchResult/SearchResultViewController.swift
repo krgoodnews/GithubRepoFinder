@@ -11,10 +11,6 @@ import UIKit
 // MARK: - Search Results
 
 final class SearchResultViewController: UIViewController {
-    private enum Const {
-        static let cellReuseIdentifier = "RepositoryCell"
-    }
-
     private let viewModel = RepositorySearchViewModel()
     private var cancellables = Set<AnyCancellable>()
     private let querySubject = PassthroughSubject<String, Never>()
@@ -61,7 +57,8 @@ final class SearchResultViewController: UIViewController {
 
         tableView.dataSource = self
         tableView.delegate = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Const.cellReuseIdentifier)
+        let cellNib = UINib(nibName: "RepositoryCell", bundle: Bundle(for: RepositoryCell.self))
+        tableView.register(cellNib, forCellReuseIdentifier: RepositoryCell.reuseIdentifier)
 
         let stackView = UIStackView(arrangedSubviews: [totalCountLabel, tableView])
         stackView.axis = .vertical
@@ -139,14 +136,12 @@ extension SearchResultViewController: UITableViewDataSource, UITableViewDelegate
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: Const.cellReuseIdentifier, for: indexPath)
         let repo = viewModel.repositories[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: RepositoryCell.reuseIdentifier, for: indexPath)
 
-        var content = UIListContentConfiguration.subtitleCell()
-        content.text = repo.name
-        content.secondaryText = repo.owner.login
-        cell.contentConfiguration = content
-        cell.accessoryType = .none
+        if let repositoryCell = cell as? RepositoryCell {
+            repositoryCell.configure(with: repo)
+        }
 
         return cell
     }
