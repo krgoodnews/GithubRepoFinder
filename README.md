@@ -106,3 +106,9 @@ GithubRepoFinder/
 
 - **에러 처리**
   - 네트워크/HTTP status/디코딩 오류를 `NetworkError`로 정리하고, 결과 화면에서 Alert로 사용자 피드백을 제공합니다.
+
+## AI Prompt
+
+Cursor AI를 사용했습니다.
+- Model: GPT-5.2
+- [.cursorrules 보기](./.cursorrules)
