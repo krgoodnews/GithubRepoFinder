@@ -24,18 +24,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		E6680E1C2EF40AE000D106C0 /* KurlyAssignment.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KurlyAssignment.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		E6680E322EF40AE200D106C0 /* KurlyAssignmentTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KurlyAssignmentTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E6680E3C2EF40AE200D106C0 /* KurlyAssignmentUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KurlyAssignmentUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6680E1C2EF40AE000D106C0 /* GithubRepoFinder.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GithubRepoFinder.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6680E322EF40AE200D106C0 /* GithubRepoFinderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GithubRepoFinderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E6680E3C2EF40AE200D106C0 /* GithubRepoFinderUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GithubRepoFinderUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E6680E442EF40AE200D106C0 /* Exceptions for "KurlyAssignment" folder in "KurlyAssignment" target */ = {
+		E6680E442EF40AE200D106C0 /* Exceptions for "KurlyAssignment" folder in "GithubRepoFinder" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
 			);
-			target = E6680E1B2EF40AE000D106C0 /* KurlyAssignment */;
+			target = E6680E1B2EF40AE000D106C0 /* GithubRepoFinder */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
@@ -43,7 +43,7 @@
 		E6680E1E2EF40AE000D106C0 /* KurlyAssignment */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				E6680E442EF40AE200D106C0 /* Exceptions for "KurlyAssignment" folder in "KurlyAssignment" target */,
+				E6680E442EF40AE200D106C0 /* Exceptions for "KurlyAssignment" folder in "GithubRepoFinder" target */,
 			);
 			path = KurlyAssignment;
 			sourceTree = "<group>";
@@ -98,9 +98,9 @@
 		E6680E1D2EF40AE000D106C0 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				E6680E1C2EF40AE000D106C0 /* KurlyAssignment.app */,
-				E6680E322EF40AE200D106C0 /* KurlyAssignmentTests.xctest */,
-				E6680E3C2EF40AE200D106C0 /* KurlyAssignmentUITests.xctest */,
+				E6680E1C2EF40AE000D106C0 /* GithubRepoFinder.app */,
+				E6680E322EF40AE200D106C0 /* GithubRepoFinderTests.xctest */,
+				E6680E3C2EF40AE200D106C0 /* GithubRepoFinderUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -108,9 +108,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		E6680E1B2EF40AE000D106C0 /* KurlyAssignment */ = {
+		E6680E1B2EF40AE000D106C0 /* GithubRepoFinder */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E6680E452EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "KurlyAssignment" */;
+			buildConfigurationList = E6680E452EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "GithubRepoFinder" */;
 			buildPhases = (
 				E6680E182EF40AE000D106C0 /* Sources */,
 				E6680E192EF40AE000D106C0 /* Frameworks */,
@@ -123,16 +123,16 @@
 			fileSystemSynchronizedGroups = (
 				E6680E1E2EF40AE000D106C0 /* KurlyAssignment */,
 			);
-			name = KurlyAssignment;
+			name = GithubRepoFinder;
 			packageProductDependencies = (
 			);
 			productName = KurlyAssignment;
-			productReference = E6680E1C2EF40AE000D106C0 /* KurlyAssignment.app */;
+			productReference = E6680E1C2EF40AE000D106C0 /* GithubRepoFinder.app */;
 			productType = "com.apple.product-type.application";
 		};
-		E6680E312EF40AE200D106C0 /* KurlyAssignmentTests */ = {
+		E6680E312EF40AE200D106C0 /* GithubRepoFinderTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E6680E4A2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "KurlyAssignmentTests" */;
+			buildConfigurationList = E6680E4A2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "GithubRepoFinderTests" */;
 			buildPhases = (
 				E6680E2E2EF40AE200D106C0 /* Sources */,
 				E6680E2F2EF40AE200D106C0 /* Frameworks */,
@@ -146,16 +146,16 @@
 			fileSystemSynchronizedGroups = (
 				E6680E352EF40AE200D106C0 /* KurlyAssignmentTests */,
 			);
-			name = KurlyAssignmentTests;
+			name = GithubRepoFinderTests;
 			packageProductDependencies = (
 			);
 			productName = KurlyAssignmentTests;
-			productReference = E6680E322EF40AE200D106C0 /* KurlyAssignmentTests.xctest */;
+			productReference = E6680E322EF40AE200D106C0 /* GithubRepoFinderTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		E6680E3B2EF40AE200D106C0 /* KurlyAssignmentUITests */ = {
+		E6680E3B2EF40AE200D106C0 /* GithubRepoFinderUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = E6680E4D2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "KurlyAssignmentUITests" */;
+			buildConfigurationList = E6680E4D2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "GithubRepoFinderUITests" */;
 			buildPhases = (
 				E6680E382EF40AE200D106C0 /* Sources */,
 				E6680E392EF40AE200D106C0 /* Frameworks */,
@@ -169,11 +169,11 @@
 			fileSystemSynchronizedGroups = (
 				E6680E3F2EF40AE200D106C0 /* KurlyAssignmentUITests */,
 			);
-			name = KurlyAssignmentUITests;
+			name = GithubRepoFinderUITests;
 			packageProductDependencies = (
 			);
 			productName = KurlyAssignmentUITests;
-			productReference = E6680E3C2EF40AE200D106C0 /* KurlyAssignmentUITests.xctest */;
+			productReference = E6680E3C2EF40AE200D106C0 /* GithubRepoFinderUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -199,7 +199,7 @@
 					};
 				};
 			};
-			buildConfigurationList = E6680E172EF40AE000D106C0 /* Build configuration list for PBXProject "KurlyAssignment" */;
+			buildConfigurationList = E6680E172EF40AE000D106C0 /* Build configuration list for PBXProject "GithubRepoFinder" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -213,9 +213,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				E6680E1B2EF40AE000D106C0 /* KurlyAssignment */,
-				E6680E312EF40AE200D106C0 /* KurlyAssignmentTests */,
-				E6680E3B2EF40AE200D106C0 /* KurlyAssignmentUITests */,
+				E6680E1B2EF40AE000D106C0 /* GithubRepoFinder */,
+				E6680E312EF40AE200D106C0 /* GithubRepoFinderTests */,
+				E6680E3B2EF40AE200D106C0 /* GithubRepoFinderUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -271,12 +271,12 @@
 /* Begin PBXTargetDependency section */
 		E6680E342EF40AE200D106C0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E6680E1B2EF40AE000D106C0 /* KurlyAssignment */;
+			target = E6680E1B2EF40AE000D106C0 /* GithubRepoFinder */;
 			targetProxy = E6680E332EF40AE200D106C0 /* PBXContainerItemProxy */;
 		};
 		E6680E3E2EF40AE200D106C0 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = E6680E1B2EF40AE000D106C0 /* KurlyAssignment */;
+			target = E6680E1B2EF40AE000D106C0 /* GithubRepoFinder */;
 			targetProxy = E6680E3D2EF40AE200D106C0 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -487,7 +487,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KurlyAssignment.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KurlyAssignment";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubRepoFinder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GithubRepoFinder";
 			};
 			name = Debug;
 		};
@@ -509,7 +509,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KurlyAssignment.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KurlyAssignment";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GithubRepoFinder.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GithubRepoFinder";
 			};
 			name = Release;
 		};
@@ -556,7 +556,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		E6680E172EF40AE000D106C0 /* Build configuration list for PBXProject "KurlyAssignment" */ = {
+		E6680E172EF40AE000D106C0 /* Build configuration list for PBXProject "GithubRepoFinder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E6680E482EF40AE200D106C0 /* Debug */,
@@ -565,7 +565,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E6680E452EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "KurlyAssignment" */ = {
+		E6680E452EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "GithubRepoFinder" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E6680E462EF40AE200D106C0 /* Debug */,
@@ -574,7 +574,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E6680E4A2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "KurlyAssignmentTests" */ = {
+		E6680E4A2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "GithubRepoFinderTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E6680E4B2EF40AE200D106C0 /* Debug */,
@@ -583,7 +583,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		E6680E4D2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "KurlyAssignmentUITests" */ = {
+		E6680E4D2EF40AE200D106C0 /* Build configuration list for PBXNativeTarget "GithubRepoFinderUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E6680E4E2EF40AE200D106C0 /* Debug */,
